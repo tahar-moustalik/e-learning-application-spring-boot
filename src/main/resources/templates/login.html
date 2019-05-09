@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"  lang="en"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        layout:decorate="~{visitor_layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content" >
+    <!-- ================ start banner Area ================= -->
+    <section class="banner-area">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-12 banner-right">
+                    <h1 class="text-white">
+                        Se Connecter
+                    </h1>
+                    <div class="link-nav">
+						<span class="box">
+							<a href="index.html">Accueil </a>
+							<i class="lnr lnr-arrow-right"></i>
+							<a href="contacts.html">Se Connecter</a>
+						</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ================ End banner Area ================= -->
+
+    <!-- ================ Start contact-page Area  ================= -->
+    <section class="contact-page-area section-gap">
+        <div class="container" style="margin-top: -40px;">
+            <div class="row">
+                <div class="col-lg-4 d-flex flex-column address-wrap">
+                    <div class="single-contact-address d-flex flex-row">
+                        <div class="contact-details">
+                            <h5>Pas Encore Inscris ? </h5>
+                            <p>
+                               S'inscrire
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+
+                    <div class="alert alert-warning bg-primary text-white" align="center" th:if="${param.error}">
+                            Email ou Mot de Passe incorrecte!.
+                    </div>
+
+                    <div class="card rounded-0">
+                        <div class="card-header">
+                            <h3 class="mb-0">Connectez-vous</h3>
+                        </div>
+                        <div class="card-body">
+                    <form class="form-area contact-form text-right" id="myForm" th:action="@{/login}" method="post">
+                            <div class="col-lg-12 row form-group">
+
+                                <input name="email" placeholder="Votre Adresse Email"
+                                        class="common-input mb-20 form-control"
+                                       required="" type="email">
+                                <input name="password" placeholder="Votre Mot de Passe"
+                                       class="common-input mb-20 form-control" required="" type="password">
+                            </div>
+                            <div class="col-lg-12  row form-group">
+                                <div class="alert-msg" style="text-align: left;"></div>
+                                <button class="btn" type="submit" align="center">Se Connecter</button>
+                            </div>
+
+                    </form>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+            </div>
+        </div>
+    </section>
+    <!-- ================ End contact-page Area ================= -->
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".close").click(function () {
+            $("#myAlert").alert("close");
+        });
+    });
+</script>
+</body>
+</html>

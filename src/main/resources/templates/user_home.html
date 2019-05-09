@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"  lang="en"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        layout:decorate="~{auth_layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content" >
+    <div  th:replace="banner"></div>
+    <div  th:replace="features"></div>
+    <div  th:replace="cours-populaires"></div>
+    <div  th:replace="key-features"></div>
+</div>
+</body>
+</html>

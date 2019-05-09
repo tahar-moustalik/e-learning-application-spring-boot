@@ -1,0 +1,39 @@
+<header class="default-header" th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
+    <nav class="navbar navbar-expand-lg  navbar-light">
+        <div class="container">
+            <a class="navbar-brand text-white" href="index.html" style="font-size: 40px;font-family: 'Consolas';">
+              Mep
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="lnr lnr-menu"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end align-items-center" id="navbarSupportedContent">
+                <ul class="navbar-nav">
+                    <li><a href="index.html">Accueil</a></li>
+                    <li><a href="about.html">A Propos</a></li>
+                    <li><a href="courses.html">Cours</a></li>
+                    <li><a href="contacts.html">Contacts</a></li>
+
+                    <li>
+                        <a><i class="material-icons text-white">search</i></a>
+                    </li>
+                    <li>
+                       <a class="text-white" th:href="@{/registration}">
+                           S'inscrire
+                       </a>
+                    </li>
+                    <li>
+                        <a class="text-white" th:href="@{/login}">
+                            Se Connecter
+                        </a>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+</header>
