@@ -1,0 +1,72 @@
+<!doctype html>
+<html class="no-js" lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Admin - Authentification</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/admin/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/metisMenu.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/slicknav.min.css}">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" th:href="@{/admin/css/typography.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/default-css.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/responsive.css}">
+    <!-- modernizr css -->
+    <script th:src="@{/admin/js/vendor/modernizr-2.8.3.min.js}"></script>
+</head>
+
+<body>
+    <div class="login-area">
+        <div class="container">
+            <div class="login-box ptb--100">
+                <form th:action="@{/login}" method="post">
+                    <div class="login-form-head">
+                        <h4>Connexion Administrateur</h4>
+                    </div>
+                    <div class="login-form-body">
+                        <div class="form-gp">
+                            <label for="exampleInputEmail1">Adresse Email</label>
+                            <input type="email"  name="email" id="exampleInputEmail1">
+                            <i class="ti-email"></i>
+                        </div>
+                        <div class="form-gp">
+                            <label for="exampleInputPassword1">Mot de Passe</label>
+                            <input type="password"  name="password" id="exampleInputPassword1">
+                            <i class="ti-lock"></i>
+                        </div>
+                        <div class="submit-btn-area">
+                            <button id="form_submit" type="submit">Se Connecter<i class="ti-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+<script th:src="@{/admin/js/vendor/jquery-2.2.4.min.js}"></script>
+<!-- bootstrap 4 js -->
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/js/owl.carousel.min.js}"></script>
+<script th:src="@{/admin/js/metisMenu.min.js}"></script>
+<script th:src="@{/admin/js/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/admin/js/jquery.slicknav.min.js}"></script>
+<script th:src="@{/admin/js/plugins.js}"></script>
+<script th:src="@{/admin/js/scripts.js}"></script>
+</body>
+
+</html>

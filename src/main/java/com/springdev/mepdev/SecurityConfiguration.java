@@ -17,6 +17,9 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
+    CustomSuccessHandler customSuccessHandler;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
@@ -48,16 +51,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers("/img/**","/css/**","js/**").permitAll()
+                .antMatchers("/img/**","/css/**","/js/**","/admin/**").permitAll()
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/admin").permitAll()
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/user").hasAuthority("APPRENANT")
                 .antMatchers("/profil/**").hasAuthority("APPRENANT")
+                .antMatchers("/db").hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated().and().csrf().disable().formLogin()
-                .loginPage("/login").failureUrl("/login?error=true")
-                .defaultSuccessUrl("/user")
+                .loginPage("/login").failureUrl("/login?error=true").successHandler(customSuccessHandler)
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .and().logout()
@@ -73,6 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         web
                 .ignoring()
                 .antMatchers("/img/**","/css/**",
-                        "js/**");
+                        "/js/**",
+                        "/admin/**");
     }
 }

@@ -1,0 +1,134 @@
+<!doctype html>
+<html  class="no-js"  lang="fr" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Admin - Tableau de Bord</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/admin/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/themify-icons.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/metisMenu.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/slicknav.min.css}">
+    <!-- amchart css -->
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <!-- others css -->
+    <link rel="stylesheet" th:href="@{/admin/css/typography.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/default-css.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/admin/css/responsive.css}">
+    <!-- modernizr css -->
+    <script th:src="@{/admin/js/vendor/modernizr-2.8.3.min.js}"></script>
+</head>
+
+<body>
+<div id="preloader">
+    <div class="loader"></div>
+</div>
+<div class="page-container">
+    <!-- sidebar menu area start -->
+    <div class="sidebar-menu">
+        <div class="sidebar-header">
+            <div class="logo">
+                <a href="index.html"><span>MEP</span></a>
+            </div>
+        </div>
+        <div class="main-menu">
+            <div class="menu-inner">
+                <nav>
+                    <ul class="metismenu" id="menu">
+                        <li class="active">
+                            <a href="index.html">Tableau de Bord</a>
+                        </li>
+                        <li>
+                            <a href="utilisateurs.html"
+                            >Utilisateurs</a>
+                        </li>
+                        <li>
+                            <a href="demandes.html">Demandes Formateurs</a>
+                        </li>
+                        <li>
+                            <a  href="paiement.html"
+                                class="active">Historique de Paiement</a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <!-- sidebar menu area end -->
+    <!-- main content area start -->
+    <div class="main-content">
+        <!-- header area start -->
+        <div class="header-area">
+            <div class="row align-items-center">
+                <!-- nav and search button -->
+                <div class="col-md-6 col-sm-8 clearfix">
+                    <div class="nav-btn pull-left">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- header area end -->
+        <!-- page title area start -->
+        <div class="page-title-area">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <div class="breadcrumbs-area clearfix">
+                        <h4 class="page-title pull-left">Tableau de Bord</h4>
+                        <ul class="breadcrumbs pull-left">
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><span>Tableau de Bord</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6 clearfix">
+                    <div class="user-profile pull-right">
+                        <i class="material-icons text-white">person</i>
+                        <h4 class="user-name dropdown-toggle" data-toggle="dropdown" ><span th:utext="${fullName}"></span><i class="fa fa-angle-down"></i></h4>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Paramètres</a>
+                            <a class="dropdown-item" th:href="@{/logout}">Se Déconnecter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- page title area end -->
+        <div class="main-content-inner">
+            <div  layout:fragment="content"></div>
+        </div>
+    </div>
+    <!-- main content area end -->
+    <!-- footer area start-->
+    <footer>
+        <div class="footer-area">
+            <p>© Copyright 2018. All right reserved. MEP</a>.</p>
+        </div>
+    </footer>
+    <!-- footer area end-->
+</div>
+<!-- jquery latest version -->
+<script th:src="@{/admin/js/vendor/jquery-2.2.4.min.js}"></script>
+<!-- bootstrap 4 js -->
+<script th:src="@{/admin/js/popper.min.js}"></script>
+<script th:src="@{/admin/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/js/owl.carousel.min.js}"></script>
+<script th:src="@{/admin/js/metisMenu.min.js}"></script>
+<script th:src="@{/admin/js/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/admin/js/jquery.slicknav.min.js}"></script>
+<script th:src="@{/admin/js/plugins.js}"></script>
+<script th:src="@{/admin/js/scripts.js}"></script>
+</body>
+
+</html>
