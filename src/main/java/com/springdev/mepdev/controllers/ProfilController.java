@@ -4,25 +4,35 @@ package com.springdev.mepdev.controllers;
 
 import com.springdev.mepdev.models.Experience;
 import com.springdev.mepdev.models.Profil;
+import com.springdev.mepdev.models.Utilisateur;
 import com.springdev.mepdev.persistance.ExperienceRepository;
 import com.springdev.mepdev.services.ProfilService;
+import com.springdev.mepdev.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 public class ProfilController {
-    private static final String AJAX_HEADER_NAME = "X-Requested-With";
-    private static final String AJAX_HEADER_VALUE = "XMLHttpRequest";
-
 
     @Autowired
     private ProfilService profilService;
@@ -31,7 +41,8 @@ public class ProfilController {
     @Qualifier("experienceRepository")
     private ExperienceRepository experienceRepository;
 
-
+    @Autowired
+    private UtilisateurService utilisateurService;
 
     @RequestMapping(value="/profil/{userId}", method = RequestMethod.GET)
     public ModelAndView profil( @PathVariable Long userId){
@@ -60,35 +71,58 @@ public class ProfilController {
         return modelAndView;
     }
 
-    @PostMapping(path = {"/profil", "/profil/{id}"})
-    public ModelAndView addExperience(Profil profil, HttpServletRequest request) {
-        List<Experience> experienceList = new ArrayList<>(profil.getExperiences());
-        System.out.println("BEFORE");
-        for (Experience experience : experienceList) {
-            System.out.println(experience);
-        }
+    @RequestMapping(value="/experience", method = RequestMethod.GET)
+    public ModelAndView addExperience(){
+        ModelAndView modelAndView = new ModelAndView();
         Experience e = new Experience();
-        experienceRepository.save(e);
-        experienceList.add(e);
-        profil.setExperiences(experienceList);
-        profilService.saveProfil(profil);
-        if (AJAX_HEADER_VALUE.equals(request.getHeader(AJAX_HEADER_NAME))) {
-            // It is an Ajax request, render only #items fragment of the page.
-            System.out.println("AFTER");
-            for (Experience experience : experienceList) {
-                System.out.println(experience);
-            }
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("profil",profil);
-            modelAndView.setViewName("profil");
-            return modelAndView;
-        } else {
-            ModelAndView modelAndView = new ModelAndView();
-            modelAndView.addObject("profil",profil);
-            modelAndView.setViewName("profil");
-            return modelAndView;
-        }
+        modelAndView.addObject("experience",e);
+        modelAndView.setViewName("experience");
+        return modelAndView;
     }
+
+    @RequestMapping(value="/saveexperience", method = RequestMethod.POST)
+    public ModelAndView saveExperience(@Valid @ModelAttribute(value = "experience") Experience experience, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("experience");
+        } else {
+            experienceRepository.save(experience);
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Utilisateur utilisateur = utilisateurService.findUserByEmail(auth.getName());
+            Profil profil = profilService.showUserProfil(utilisateur.getId());
+            experienceRepository.save(experience);
+            profil.addExperience(experience);
+            profilService.saveProfil(profil);
+            modelAndView.addObject("profil", profil);
+            modelAndView.setViewName("profil");
+
+        }
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/experience/{profilId}/delete/{expId}", method = RequestMethod.GET)
+    public String deleteExperience(@PathVariable Long profilId,@PathVariable Long expId){
+        Profil profil = profilService.getProfil(profilId);
+        profil.removeExperience(expId);
+        profilService.saveProfil(profil);
+        experienceRepository.delete(experienceRepository.findById(expId).get());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Utilisateur utilisateur = utilisateurService.findUserByEmail(auth.getName());
+        return "redirect:/profil/"+utilisateur.getId();
+    }
+
+
+    @InitBinder
+    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        dateFormat.setLenient(false);
+        binder.registerCustomEditor(Date.class, null,  new CustomDateEditor(dateFormat, true));
+    }
+
+
 
 
 

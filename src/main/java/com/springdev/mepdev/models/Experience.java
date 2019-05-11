@@ -2,6 +2,8 @@ package com.springdev.mepdev.models;
 
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 @Data
+@EqualsAndHashCode(of = "id")
 @Entity
 public class Experience {
 
@@ -26,12 +29,9 @@ public class Experience {
     @NotEmpty(message = "*Veuillez Saisir Le nom de l'ogranisation ")
     private String nomOrganisation;
 
-    @NotEmpty
-    @NotEmpty(message = "*Veuillez Saisir la date de début")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateDebut;
-
-    @NotEmpty
-    @NotEmpty(message = "*Veuillez Saisir la date de fin")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateFin;
 
 }

@@ -61,37 +61,5 @@
 <script th:src="@{/js/waypoints.min.js}"></script>
 <script th:src="@{/js/jquery.nice-select.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
-<script>
-    // jQuery
-    function replaceItems (html) {
-        // Replace the <fieldset id="items"> with a new one returned by server.
-        $('#experiences').replaceWith($(html));
-    }
-
-    function addItem(){
-        var form = document.getElementsByName("form");
-        var data = form.serialize();
-        console.log(data);
-    }
-
-    $("#addItem").click(function (event) {
-        event.preventDefault();
-        var data = $('form').serialize();
-        // Add parameter "addItem" to POSTed form data. Button's name and value is
-        // POSTed only when clicked. Since "event.preventDefault();" prevents from
-        // actual clicking the button, following line will add parameter to form
-        // data.
-        data += 'addItem';
-        $.post('/profil', data, replaceItems);
-    });
-
-    $('button[name="removeItem"]').click(function (event) {
-        event.preventDefault();
-        var data = $('form').serialize();
-        // Add parameter and index of item that is going to be removed.
-        data += 'removeItem=' + $(this).val();
-        $.post(window.location.href, data, replaceItems);
-    });
-</script>
 </body>
 </html>

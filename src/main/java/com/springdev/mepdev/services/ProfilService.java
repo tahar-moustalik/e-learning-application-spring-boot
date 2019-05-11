@@ -9,5 +9,7 @@ public interface ProfilService {
 
     public Profil saveProfil(Profil profil);
 
+    public Profil getProfil(Long profilId);
+
 
 }

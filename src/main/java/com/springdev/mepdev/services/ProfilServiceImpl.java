@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class ProfilServiceImpl implements ProfilService {
 
 
+
+
     @Autowired
     @Qualifier("profilRepository")
     private ProfilRepository profilRepository;
@@ -26,6 +28,10 @@ public class ProfilServiceImpl implements ProfilService {
     @Autowired
     private UtilisateurService utilisateurService;
 
+    @Override
+    public Profil getProfil(Long profilId) {
+        return profilRepository.findById(profilId).get();
+    }
     @Override
     public Profil showUserProfil(Long userId) {
 

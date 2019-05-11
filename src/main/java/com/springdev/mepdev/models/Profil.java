@@ -31,4 +31,17 @@ public class Profil {
 
     @OneToMany
     private List<Experience> experiences;
+
+
+    public void addExperience(Experience e){
+       experiences.add(e);
+    }
+
+    public void removeExperience(Long id){
+        Experience e = new Experience();
+        e.setId(id);
+       experiences.remove(e);
+    }
+
+
 }
