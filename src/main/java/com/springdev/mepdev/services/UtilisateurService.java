@@ -8,6 +8,8 @@ import com.springdev.mepdev.persistance.RoleRepository;
 import com.springdev.mepdev.persistance.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +48,12 @@ public class UtilisateurService {
         Role userRole = roleRepository.findByRole("APPRENANT");
         utilisateur.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
         utilisateurRepository.save(utilisateur);
+    }
+
+    public Utilisateur getCurrentUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Utilisateur utilisateur = this.findUserByEmail(auth.getName());
+        return utilisateur;
     }
 
 

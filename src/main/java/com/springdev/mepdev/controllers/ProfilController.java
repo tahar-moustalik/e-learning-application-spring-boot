@@ -12,24 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.jws.WebParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+
 
 @Controller
 public class ProfilController {
@@ -44,12 +37,23 @@ public class ProfilController {
     @Autowired
     private UtilisateurService utilisateurService;
 
-    @RequestMapping(value="/profil/{userId}", method = RequestMethod.GET)
-    public ModelAndView profil( @PathVariable Long userId){
+    @RequestMapping(value="/profil", method = RequestMethod.GET)
+    public ModelAndView profil(){
+        Utilisateur utilisateur = utilisateurService.getCurrentUser();
         ModelAndView modelAndView = new ModelAndView();
-        Profil profil = profilService.showUserProfil(userId);
+        Profil profil = profilService.showUserProfil(utilisateur.getId());
         modelAndView.addObject("profil",profil);
         modelAndView.setViewName("profil");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/devenir/formateur", method = RequestMethod.GET)
+    public ModelAndView devenirFormateur(){
+        Utilisateur utilisateur = utilisateurService.getCurrentUser();
+        ModelAndView modelAndView = new ModelAndView();
+        Profil profil = profilService.showUserProfil(utilisateur.getId());
+        modelAndView.addObject("profil",profil);
+        modelAndView.setViewName("profil_formateur");
         return modelAndView;
     }
 
@@ -71,6 +75,30 @@ public class ProfilController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/saveprofilformateur", method = RequestMethod.POST)
+    public ModelAndView saveProfilFormateur(@Valid @ModelAttribute(value = "profil") Profil profil, BindingResult bindingResult) {
+        ModelAndView modelAndView = new ModelAndView();
+        Utilisateur utilisateur = utilisateurService.getCurrentUser();
+        Profil currentUserProfil = utilisateur.getProfil();
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("profil_formateur");
+
+
+        }
+        else if(currentUserProfil.getExperiences() == null){
+            modelAndView.addObject("minExperience","Ajouter au moin une expérience professionnel");
+            modelAndView.setViewName("profil_formateur");
+        }
+        else {
+            profilService.saveProfil(profil);
+            modelAndView.addObject("successMessage", "Votre Profil a ete mis a jour avec Sucess");
+            modelAndView.addObject("profil", profil);
+            modelAndView.setViewName("profil_formateur");
+
+        }
+        return modelAndView;
+    }
+
     @RequestMapping(value="/experience", method = RequestMethod.GET)
     public ModelAndView addExperience(){
         ModelAndView modelAndView = new ModelAndView();
@@ -80,7 +108,16 @@ public class ProfilController {
         return modelAndView;
     }
 
-    @RequestMapping(value="/saveexperience", method = RequestMethod.POST)
+    @RequestMapping(value="/experience/formateur", method = RequestMethod.GET)
+    public ModelAndView addExperienceFormateur(){
+        ModelAndView modelAndView = new ModelAndView();
+        Experience e = new Experience();
+        modelAndView.addObject("experience",e);
+        modelAndView.setViewName("experience_formateur");
+        return modelAndView;
+    }
+
+    @RequestMapping(value="/save/experience", method = RequestMethod.POST)
     public ModelAndView saveExperience(@Valid @ModelAttribute(value = "experience") Experience experience, BindingResult bindingResult){
         ModelAndView modelAndView = new ModelAndView();
 
@@ -88,8 +125,7 @@ public class ProfilController {
             modelAndView.setViewName("experience");
         } else {
             experienceRepository.save(experience);
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            Utilisateur utilisateur = utilisateurService.findUserByEmail(auth.getName());
+            Utilisateur utilisateur = utilisateurService.getCurrentUser();
             Profil profil = profilService.showUserProfil(utilisateur.getId());
             experienceRepository.save(experience);
             profil.addExperience(experience);
@@ -101,15 +137,33 @@ public class ProfilController {
         return modelAndView;
     }
 
+    @RequestMapping(value="/save/experience/formateur", method = RequestMethod.POST)
+    public ModelAndView saveExperienceFormateur(@Valid @ModelAttribute(value = "experience") Experience experienceFormateur, BindingResult bindingResult){
+        ModelAndView modelAndView = new ModelAndView();
+
+        if (bindingResult.hasErrors()) {
+            modelAndView.setViewName("experience");
+        } else {
+            experienceRepository.save(experienceFormateur);
+            Utilisateur utilisateur = utilisateurService.getCurrentUser();
+            Profil profilFormateur = profilService.showUserProfil(utilisateur.getId());
+            experienceRepository.save(experienceFormateur);
+            profilFormateur.addExperience(experienceFormateur);
+            profilService.saveProfil(profilFormateur);
+            modelAndView.addObject("profil", profilFormateur);
+            modelAndView.setViewName("profil_formateur");
+
+        }
+        return modelAndView;
+    }
+
     @RequestMapping(value="/experience/{profilId}/delete/{expId}", method = RequestMethod.GET)
     public String deleteExperience(@PathVariable Long profilId,@PathVariable Long expId){
         Profil profil = profilService.getProfil(profilId);
         profil.removeExperience(expId);
         profilService.saveProfil(profil);
         experienceRepository.delete(experienceRepository.findById(expId).get());
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Utilisateur utilisateur = utilisateurService.findUserByEmail(auth.getName());
-        return "redirect:/profil/"+utilisateur.getId();
+        return "redirect:/profil";
     }
 
 

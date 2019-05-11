@@ -58,6 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/registration").permitAll()
                 .antMatchers("/user").hasAuthority("APPRENANT")
                 .antMatchers("/profil/**").hasAuthority("APPRENANT")
+                .antMatchers("/devenir/formateur/**").hasAuthority("APPRENANT")
                 .antMatchers("/db").hasAuthority("ADMIN")
                 .anyRequest()
                 .authenticated().and().csrf().disable().formLogin()

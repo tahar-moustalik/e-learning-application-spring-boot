@@ -57,43 +57,43 @@
                         </div>
 
                         <div class="card-body">
-                            <form class="form-area contact-form text-right" id="myForm" th:action="@{/save/experience}"
+                            <form class="form-area contact-form text-right" id="myForm" th:action="@{/save/experience/formateur}"
                                   th:object="${experience}"  method="post">
                                 <div class="col-lg-12 row form-group">
 
-                                        <label
-                                                th:if="${#fields.hasErrors('titrePoste')}" th:errors="*{titrePoste}"
-                                                class="font-weight-bold text-danger"></label>
-                                        <input type="text" name="titrePoste"
-                                               class="common-input mb-20 form-control" th:field="*{titrePoste}"
-                                               placeholder="Titre du Poste">
+                                    <label
+                                            th:if="${#fields.hasErrors('titrePoste')}" th:errors="*{titrePoste}"
+                                            class="font-weight-bold text-danger"></label>
+                                    <input type="text" name="titrePoste"
+                                           class="common-input mb-20 form-control" th:field="*{titrePoste}"
+                                           placeholder="Titre du Poste">
 
-                                        <label
-                                                th:if="${#fields.hasErrors('nomOrganisation')}" th:errors="*{nomOrganisation}"
-                                                class="font-weight-bold text-danger"></label>
-                                        <input type="text" name="titrePoste"
-                                               class="common-input mb-20 form-control" th:field="*{nomOrganisation}"
-                                               placeholder="Nom du Societe">
+                                    <label
+                                            th:if="${#fields.hasErrors('nomOrganisation')}" th:errors="*{nomOrganisation}"
+                                            class="font-weight-bold text-danger"></label>
+                                    <input type="text" name="titrePoste"
+                                           class="common-input mb-20 form-control" th:field="*{nomOrganisation}"
+                                           placeholder="Nom du Societe">
 
-                                        <label
-                                                th:if="${#fields.hasErrors('dateDebut')}" th:errors="*{dateDebut}"
-                                                class="font-weight-bold text-danger"></label>
-                                        <input type="date" name="dateDebut"
-                                               class="common-input mb-20 form-control"
-                                               th:field="*{dateDebut}"  placeholder="Date Debut " required>
+                                    <label
+                                            th:if="${#fields.hasErrors('dateDebut')}" th:errors="*{dateDebut}"
+                                            class="font-weight-bold text-danger"></label>
+                                    <input type="date" name="dateDebut"
+                                           class="common-input mb-20 form-control"
+                                           th:field="*{dateDebut}"  placeholder="Date Debut " required>
 
-                                        <label
-                                                th:if="${#fields.hasErrors('dateFin')}" th:errors="*{dateFin}"
-                                                class="font-weight-bold text-danger"></label>
-                                        <input type="date" name="dateDebut"
-                                               class="common-input mb-20 form-control"
-                                               placeholder="Date Fin "
-                                               th:field="*{dateFin}" required>
+                                    <label
+                                            th:if="${#fields.hasErrors('dateFin')}" th:errors="*{dateFin}"
+                                            class="font-weight-bold text-danger"></label>
+                                    <input type="date" name="dateDebut"
+                                           class="common-input mb-20 form-control"
+                                           placeholder="Date Fin "
+                                           th:field="*{dateFin}" required>
 
-                                <div class="col-lg-12  row form-group">
-                                    <div class="alert-msg" style="text-align: left;"></div>
-                                    <button class="btn" type="submit" align="center">Sauvegarder</button>
-                                </div>
+                                    <div class="col-lg-12  row form-group">
+                                        <div class="alert-msg" style="text-align: left;"></div>
+                                        <button class="btn" type="submit" align="center">Sauvegarder</button>
+                                    </div>
 
 
                             </form>
