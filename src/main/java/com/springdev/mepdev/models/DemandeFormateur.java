@@ -15,6 +15,8 @@ public class DemandeFormateur {
     @OneToOne
     private Utilisateur formateur;
 
-    private Boolean etatDemande = true;
+    private Boolean etatDemande = false;
+
+    private Boolean decisionDemande;
 
 }

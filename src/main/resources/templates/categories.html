@@ -1,0 +1,69 @@
+<!doctype html>
+<html class="no-js" lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{admin_layout}">
+
+<head>
+    <title></title>
+</head>
+
+<body>
+
+<br>
+<br>
+<div layout:fragment="content" >
+
+
+    <div class="row">
+
+        <!-- Progress Table start -->
+        <div class="col-12">
+            <a class="btn btn-outline-primary btn-sm" th:href="@{/db/categories/add}"><i class="fa fa-plus"></i> Catégorie</a>
+        </div>
+        <div class="col-12 mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="header-title">Categories</h4>
+                    <div class="single-table">
+                        <div class="table-responsive">
+                            <table class="table table-hover progress-table text-center">
+                                <thead class="text-uppercase">
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Libelle Cateogrie</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="categorie : ${categories}">
+                                    <td th:text="${categorie.id}"></td>
+                                    <td th:text="${categorie.libelleCategorie}"></td>
+                                    <td>
+                                        <ul class="d-flex justify-content-center">
+                                       <li class="mr-3"> <a th:href="@{/db/categories/delete/__${categorie.id}__}" class="text-danger">
+                                            <i class="ti-trash"></i>
+                                        </a>
+                                       </li>
+                                            <li>
+                                        <a th:href="@{/db/categories/edit/__${categorie.id}__}" class="text-secondary">
+                                            <i  class="fa fa-edit"></i>
+                                        </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+</html>

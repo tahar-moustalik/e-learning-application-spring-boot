@@ -96,7 +96,7 @@
                                            class="common-input mb-20 form-control"  type="email">
 
                                     <label>Experiences Professionnels</label>
-                                    <table class="table table-striped">
+                                    <table class="table table-striped table-responsive">
                                         <thead>
                                         <tr>
                                             <th scope="col">Titre Poste</th>
@@ -107,17 +107,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="experience : ${profil.experiences}">
-                                            <td th:text="${experience.titrePoste}"></td>
-                                            <td th:text="${experience.nomOrganisation}"></td>
-                                            <td th:text="${#temporals.format(experience.dateDebut, 'dd-MM-yyyy')}"></td>
-                                            <td th:text="${#temporals.format(experience.dateFin, 'dd-MM-yyyy')}"></td>
+                                        <tr th:each="experience,itemStat : *{experiences}">
+                                            <td><input name="titrePoste" type="text" th:field="*{experiences[__${itemStat.index}__].titrePoste}"/></td>
+                                            <td><input name="nomOrganisation"type="text" th:field="*{experiences[__${itemStat.index}__].nomOrganisation}"/></td>
+                                            <td>
+                                                <input name="dateDebut" type="date" th:field="*{experiences[__${itemStat.index}__].dateDebut}"/>
+                                            </td>
+                                            <td>
+                                                <input name="dateFin" type="date" th:field="*{experiences[__${itemStat.index}__].dateFin}"/>
+                                            </td>
+
                                             <td>
                                                 <a th:href="@{/experience/__*{id}__/delete/__${experience.id}__}">
                                                     <i class="material-icons">delete</i>
-                                                </a>
-                                                <a>
-
                                                 </a>
                                             </td>
                                         </tr>

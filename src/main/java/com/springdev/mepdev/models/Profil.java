@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,11 +31,14 @@ public class Profil {
     @Email
     private String emailPaypal;
 
-    @OneToMany
-    private List<Experience> experiences;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "profil_experiences",joinColumns = @JoinColumn(name = "profil_id"))
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Experience> experiences = new ArrayList<>();
 
 
-    public void addExperience(Experience e){
+    public void addExperience(Experience e)
+    {
        experiences.add(e);
     }
 

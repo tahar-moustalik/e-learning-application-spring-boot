@@ -49,7 +49,11 @@
                             >Utilisateurs</a>
                         </li>
                         <li>
-                            <a href="demandes.html">Demandes Formateurs</a>
+                            <a th:href="@{/db/categories}"
+                            >Categories</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/db/demandes}">Demandes Formateurs</a>
                         </li>
                         <li>
                             <a  href="paiement.html"
@@ -118,6 +122,69 @@
     </footer>
     <!-- footer area end-->
 </div>
+
+
+
+<div class="modal fade" id="userInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Profil Utilisateur</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="form-group">
+                        <label>Biographie</label>
+                    <textarea id="biographie"
+                              class="form-control"
+                              type="text">
+                                    </textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Site Web</label>
+                    <input id="urlSiteWeb"
+                           class="form-control"
+                           type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Url Facebook</label>
+                    <input id="urlFacebook"
+                           class="form-control"
+                           type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Chaine Youtube</label>
+                    <input id="urlYoutube"
+                           class="form-control"  type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Email Paypal</label>
+                    <input id="emailPaypal"
+                           class="form-control"  type="email">
+                    </div>
+                    <label>Experiences Professionnels</label>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Titre Poste</th>
+                            <th scope="col">Nom Societe</th>
+                            <th scope="col">Date Debut</th>
+                            <th scope="col">Date Fin</th>
+                        </tr>
+                        </thead>
+                        <tbody id="expInfoTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 <!-- jquery latest version -->
 <script th:src="@{/admin/js/vendor/jquery-2.2.4.min.js}"></script>
 <!-- bootstrap 4 js -->
@@ -129,6 +196,37 @@
 <script th:src="@{/admin/js/jquery.slicknav.min.js}"></script>
 <script th:src="@{/admin/js/plugins.js}"></script>
 <script th:src="@{/admin/js/scripts.js}"></script>
+<script>
+    $(document).ready(function () {
+
+        $('.viewBtn').on('click',function (event) {
+            event.preventDefault();
+            var href = $(this).attr('href');
+            $('#expInfoTable').empty();
+            $.get(href,function (utilisateur,status) {
+                $('#biographie').val(utilisateur.profil.biographie);
+                $('#urlSiteWeb').val(utilisateur.profil.urlSiteWeb);
+                $('#urlFacebook').val(utilisateur.profil.urlFacebook);
+                $('#urlYoutube').val(utilisateur.profil.urlYoutube);
+                $('#emailPaypal').val(utilisateur.profil.emailPaypal);
+                var experiencesList = utilisateur.profil.experiences;
+                console.log(utilisateur.profil.experiences);
+                for(var i=0;i<experiencesList.length;i++){
+                    var table_row = $("<tr></tr>");
+                    table_row.prepend($("<td></td>").text(experiencesList[i].dateFin));
+                    table_row.prepend($("<td></td>").text(experiencesList[i].dateDebut));
+                    table_row.prepend($("<td></td>").text(experiencesList[i].nomOrganisation));
+                    table_row.prepend($("<td></td>").text(experiencesList[i].titrePoste));
+                    $('#expInfoTable').append(table_row);
+                }
+
+            });
+            $('#userInfo').modal("show");
+        });
+    });
+
+
+</script>
 </body>
 
 </html>

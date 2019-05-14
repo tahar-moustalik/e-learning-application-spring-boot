@@ -112,17 +112,19 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="experience : ${profil.experiences}">
-                                            <td th:text="${experience.titrePoste}"></td>
-                                            <td th:text="${experience.nomOrganisation}"></td>
-                                            <td th:text="${#temporals.format(experience.dateDebut, 'dd-MM-yyyy')}"></td>
-                                            <td th:text="${#temporals.format(experience.dateFin, 'dd-MM-yyyy')}"></td>
+                                        <tr th:each="experience,itemStat : *{experiences}">
+                                            <td><input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].titrePoste}" /></td>
+                                            <td><input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].nomOrganisation}" /></td>
+                                            <td>
+                                                <input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].dateDebut}" />
+                                            </td>
+                                            <td>
+                                                <input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].dateFin}" />
+                                            </td>
+
                                             <td>
                                                 <a th:href="@{/experience/__*{id}__/delete/__${experience.id}__}">
                                                     <i class="material-icons">delete</i>
-                                                </a>
-                                                <a>
-
                                                 </a>
                                             </td>
                                         </tr>

@@ -23,7 +23,8 @@
 
                             <a class="dropdown-item" th:text="${userEmail}"></a>
                             <a class="dropdown-item" th:href="@{/profil}">Voir Profil</a>
-                            <a class="dropdown-item" th:href="@{/devenir/formateur}">Devenir Formateur</a>
+                            <a class="dropdown-item" th:if="${notFormateur}" th:href="@{/devenir/formateur}">Devenir Formateur</a>
+                            <a class="dropdown-item" th:if="${isFormateur}" th:href="@{/devenir/formateur}">Cours Ajouté</a>
                             <a class="dropdown-item" href="course-details.html">Cours Achetés</a>
                         </div>
                     </li>

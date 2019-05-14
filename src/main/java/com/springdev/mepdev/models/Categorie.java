@@ -21,5 +21,6 @@ public class Categorie {
     private Long id;
 
     @NotEmpty
+    @NotEmpty(message = "*Veuillez saisir un libelle pour la catégorie")
     private String libelleCategorie;
 }

@@ -35,7 +35,7 @@ public class Utilisateur {
 
     @Column(name = "password")
 
-    @Length(min=8, message = "* Votre Mot de passe doit contenir minimum 5 caractères")
+    @Length(min=8, message = "* Votre Mot de passe doit contenir minimum 8 caractères")
     @NotEmpty(message = "*Veuillez saisir un mot de passe")
     private String password;
 
@@ -58,6 +58,9 @@ public class Utilisateur {
     @ManyToMany
     private List<Cours> coursAchetes;
 
+    public void addRole(Role role){
+        roles.add(role);
+    }
 
 
 

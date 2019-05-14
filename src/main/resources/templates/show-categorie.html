@@ -1,0 +1,43 @@
+<!doctype html>
+<html class="no-js" lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      layout:decorate="~{admin_layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content" >
+
+    <div class="login-area">
+        <div class="container">
+
+            <div class="login-box ptb--100">
+                <form th:action="@{/db/categories/add}" method="post" th:object="${categorie}">
+                    <div class="login-form-head bg-success text-white"
+                         th:if="${successMessage}">
+                        <h4 th:text="${successMessage}"></h4>
+                    </div>
+                    <div class="login-form-head">
+                        <h4>Ajouter Catégorie</h4>
+                    </div>
+                    <div class="login-form-body">
+                        <div class="form-gp">
+                            <span  th:if="${#fields.hasErrors('libelleCategorie')}" th:errors="*{libelleCategorie}"
+                                    class="font-weight-bold text-danger"></span>
+                            <label for="exampleInputPassword1">Libelle Catégorie</label>
+                            <input type="text" th:field="*{libelleCategorie}" name="libelleCategorie" id="exampleInputPassword1">
+                        </div>
+                        <div class="submit-btn-area">
+                            <button id="form_submit" type="submit">Ajouter<i class="ti-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

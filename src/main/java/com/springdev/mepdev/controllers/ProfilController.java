@@ -2,9 +2,11 @@ package com.springdev.mepdev.controllers;
 
 
 
+import com.springdev.mepdev.models.DemandeFormateur;
 import com.springdev.mepdev.models.Experience;
 import com.springdev.mepdev.models.Profil;
 import com.springdev.mepdev.models.Utilisateur;
+import com.springdev.mepdev.persistance.DemandeFormateurRepository;
 import com.springdev.mepdev.persistance.ExperienceRepository;
 import com.springdev.mepdev.services.ProfilService;
 import com.springdev.mepdev.services.UtilisateurService;
@@ -35,7 +37,18 @@ public class ProfilController {
     private ExperienceRepository experienceRepository;
 
     @Autowired
+    @Qualifier("demandeFormateurRepository")
+    private DemandeFormateurRepository demandeFormateurRepository;
+
+    @Autowired
     private UtilisateurService utilisateurService;
+
+
+    @GetMapping("/findUser")
+    @ResponseBody
+    public Utilisateur findOne(Long id){
+     return  utilisateurService.getUser(id);
+    }
 
     @RequestMapping(value="/profil", method = RequestMethod.GET)
     public ModelAndView profil(){
@@ -91,9 +104,12 @@ public class ProfilController {
         }
         else {
             profilService.saveProfil(profil);
-            modelAndView.addObject("successMessage", "Votre Profil a ete mis a jour avec Sucess");
+            modelAndView.addObject("successMessage", "Votre Demande pour Devenir Formateur est envoyé");
             modelAndView.addObject("profil", profil);
             modelAndView.setViewName("profil_formateur");
+            DemandeFormateur demandeFormateur = new DemandeFormateur();
+            demandeFormateur.setFormateur(utilisateur);
+            demandeFormateurRepository.save(demandeFormateur);
 
         }
         return modelAndView;
@@ -129,6 +145,7 @@ public class ProfilController {
             Profil profil = profilService.showUserProfil(utilisateur.getId());
             experienceRepository.save(experience);
             profil.addExperience(experience);
+            profil.setExperiences(profil.getExperiences());
             profilService.saveProfil(profil);
             modelAndView.addObject("profil", profil);
             modelAndView.setViewName("profil");
@@ -147,8 +164,8 @@ public class ProfilController {
             experienceRepository.save(experienceFormateur);
             Utilisateur utilisateur = utilisateurService.getCurrentUser();
             Profil profilFormateur = profilService.showUserProfil(utilisateur.getId());
-            experienceRepository.save(experienceFormateur);
-            profilFormateur.addExperience(experienceFormateur);
+            Experience e=  experienceRepository.save(experienceFormateur);
+            profilFormateur.addExperience(e);
             profilService.saveProfil(profilFormateur);
             modelAndView.addObject("profil", profilFormateur);
             modelAndView.setViewName("profil_formateur");
