@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -60,5 +61,21 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id).get();
     }
 
+
+    public ModelAndView infoUser(){
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Utilisateur user = this.findUserByEmail(auth.getName());
+        if(user.getRoles().size() > 1){
+            modelAndView.addObject("isFormateur","FORMATEUR");
+        }
+        else {
+            modelAndView.addObject("notFormateur","NOT FORMATEUR");
+        }
+        modelAndView.addObject("userId",user.getId());
+        modelAndView.addObject("userEmail",  user.getEmail());
+        modelAndView.addObject("fullName", user.getPrenom() + " " + user.getNom());
+        return modelAndView;
+    }
 
 }

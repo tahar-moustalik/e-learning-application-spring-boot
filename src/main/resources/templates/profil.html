@@ -108,13 +108,13 @@
                                         </thead>
                                         <tbody>
                                         <tr th:each="experience,itemStat : *{experiences}">
-                                            <td><input name="titrePoste" type="text" th:field="*{experiences[__${itemStat.index}__].titrePoste}"/></td>
-                                            <td><input name="nomOrganisation"type="text" th:field="*{experiences[__${itemStat.index}__].nomOrganisation}"/></td>
+                                            <td><input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].titrePoste}" /></td>
+                                            <td><input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].nomOrganisation}" /></td>
                                             <td>
-                                                <input name="dateDebut" type="date" th:field="*{experiences[__${itemStat.index}__].dateDebut}"/>
+                                                <input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].dateDebut}" />
                                             </td>
                                             <td>
-                                                <input name="dateFin" type="date" th:field="*{experiences[__${itemStat.index}__].dateFin}"/>
+                                                <input class="common-input mb-20 form-control" th:field="*{experiences[__${itemStat.index}__].dateFin}" />
                                             </td>
 
                                             <td>

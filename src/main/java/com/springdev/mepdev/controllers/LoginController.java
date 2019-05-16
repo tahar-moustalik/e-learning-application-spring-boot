@@ -23,6 +23,7 @@ public class LoginController {
     private UtilisateurService utilisateurService;
 
 
+
     @RequestMapping(value = "/",method = RequestMethod.GET)
     public String index(){
         return "index";
@@ -37,9 +38,11 @@ public class LoginController {
 
 
     @RequestMapping(value="/registration", method = RequestMethod.GET)
-    public String registration(Model model){
-        model.addAttribute("user",new Utilisateur());
-        return "registration";
+    public ModelAndView registration(Model model){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("user",new Utilisateur());
+        modelAndView.setViewName("registration");
+       return modelAndView;
     }
 
 
@@ -68,19 +71,7 @@ public class LoginController {
 
     @RequestMapping(value="/user", method = RequestMethod.GET)
     public ModelAndView home(){
-        ModelAndView modelAndView = new ModelAndView();
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Utilisateur user = utilisateurService.findUserByEmail(auth.getName());
-        if(user.getRoles().size() > 1){
-            modelAndView.addObject("isFormateur","FORMATEUR");
-        }
-        else {
-            modelAndView.addObject("notFormateur","NOT FORMATEUR");
-        }
-        modelAndView.addObject("userId",user.getId());
-        modelAndView.addObject("userEmail",  user.getEmail());
-        modelAndView.addObject("fullName",user.getPrenom() + " " + user.getNom());
-
+        ModelAndView modelAndView = utilisateurService.infoUser();
         modelAndView.setViewName("user_home");
         return modelAndView;
     }

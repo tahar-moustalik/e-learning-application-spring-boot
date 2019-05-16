@@ -29,6 +29,8 @@ import java.util.Date;
 @Controller
 public class ProfilController {
 
+
+
     @Autowired
     private ProfilService profilService;
 
@@ -53,7 +55,7 @@ public class ProfilController {
     @RequestMapping(value="/profil", method = RequestMethod.GET)
     public ModelAndView profil(){
         Utilisateur utilisateur = utilisateurService.getCurrentUser();
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         Profil profil = profilService.showUserProfil(utilisateur.getId());
         modelAndView.addObject("profil",profil);
         modelAndView.setViewName("profil");
@@ -63,7 +65,7 @@ public class ProfilController {
     @RequestMapping(value="/devenir/formateur", method = RequestMethod.GET)
     public ModelAndView devenirFormateur(){
         Utilisateur utilisateur = utilisateurService.getCurrentUser();
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         Profil profil = profilService.showUserProfil(utilisateur.getId());
         modelAndView.addObject("profil",profil);
         modelAndView.setViewName("profil_formateur");
@@ -74,7 +76,7 @@ public class ProfilController {
 
     @RequestMapping(value = "/saveprofil", method = RequestMethod.POST)
     public ModelAndView createNewUser(@Valid @ModelAttribute(value = "profil") Profil profil, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("profil");
@@ -90,7 +92,7 @@ public class ProfilController {
 
     @RequestMapping(value = "/saveprofilformateur", method = RequestMethod.POST)
     public ModelAndView saveProfilFormateur(@Valid @ModelAttribute(value = "profil") Profil profil, BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         Utilisateur utilisateur = utilisateurService.getCurrentUser();
         Profil currentUserProfil = utilisateur.getProfil();
         if (bindingResult.hasErrors()) {
@@ -117,7 +119,7 @@ public class ProfilController {
 
     @RequestMapping(value="/experience", method = RequestMethod.GET)
     public ModelAndView addExperience(){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         Experience e = new Experience();
         modelAndView.addObject("experience",e);
         modelAndView.setViewName("experience");
@@ -126,7 +128,7 @@ public class ProfilController {
 
     @RequestMapping(value="/experience/formateur", method = RequestMethod.GET)
     public ModelAndView addExperienceFormateur(){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         Experience e = new Experience();
         modelAndView.addObject("experience",e);
         modelAndView.setViewName("experience_formateur");
@@ -135,7 +137,7 @@ public class ProfilController {
 
     @RequestMapping(value="/save/experience", method = RequestMethod.POST)
     public ModelAndView saveExperience(@Valid @ModelAttribute(value = "experience") Experience experience, BindingResult bindingResult){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("experience");
@@ -156,7 +158,7 @@ public class ProfilController {
 
     @RequestMapping(value="/save/experience/formateur", method = RequestMethod.POST)
     public ModelAndView saveExperienceFormateur(@Valid @ModelAttribute(value = "experience") Experience experienceFormateur, BindingResult bindingResult){
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
 
         if (bindingResult.hasErrors()) {
             modelAndView.setViewName("experience");

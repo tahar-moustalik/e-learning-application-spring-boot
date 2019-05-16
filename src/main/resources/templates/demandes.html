@@ -44,27 +44,24 @@
                                         <ul class="d-flex justify-content-center">
                                             <li class="mr-3"> <a
                                                     th:href="@{/db/demandes/accepter-demande/__${demande.id}__}"
-                                                    class="btn btn-rounded btn-sm btn-success">
+                                                    class="btn btn-sm btn-outline-success">
                                                 Accepter
                                             </a>
                                             </li>
                                             <li class="mr-3"> <a
                                                     th:href="@{/db/demandes/refuser-demande/__${demande.id}__}"
-                                                    class="btn btn-rounded btn-sm btn-success">
+                                                    class="btn  btn-sm btn-outline-danger">
                                                 Refuser
                                             </a>
                                             </li>
                                             <li class="mr-3"> <a
                                                     th:href="@{/findUser/(id=${demande.formateur.id})}"
-                                                    class="btn btn-rounded btn-sm text-danger viewBtn"
+                                                    class="btn btn-rounded btn-sm text-info viewBtn"
                                             data-toggle="modal">
-                                                <i class="fa fa-eye"></i>
+                                                <i class="material-icons">
+                                                    remove_red_eye
+                                                </i>
                                             </a>
-                                            </li>
-                                            <li>
-                                                <a href="" class="text-secondary">
-                                                    <i  class="fa fa-edit"></i>
-                                                </a>
                                             </li>
                                         </ul>
                                     </td>
