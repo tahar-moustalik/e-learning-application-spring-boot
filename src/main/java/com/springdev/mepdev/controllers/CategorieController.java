@@ -44,7 +44,7 @@ public class CategorieController {
         ModelAndView modelAndView = new ModelAndView();
 
         if(bindingResult.hasErrors()){
-            modelAndView.setViewName("categorie");
+            modelAndView.setViewName("show-categorie");
         }
         else {
             categorieRepository.save(categorie);

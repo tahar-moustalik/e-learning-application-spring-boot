@@ -32,7 +32,7 @@ public class DemandeFormateurServiceImpl implements DemandeFormateurService {
         demandeFormateur.setEtatDemande(true);
         demandeFormateur.setDecisionDemande(true);
         Utilisateur utilisateur = demandeFormateur.getFormateur();
-        Role role = roleRepository.findByRole("FORMATEUR");
+        Role role = roleRepository.findByRoleName("FORMATEUR");
         utilisateur.addRole(role);
         utilisateurRepository.save(utilisateur);
         demandeFormateurRepository.save(demandeFormateur);
