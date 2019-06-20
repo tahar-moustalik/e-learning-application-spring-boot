@@ -18,12 +18,10 @@ public class Paragraphe {
     private Long id;
 
     @NotEmpty
+    @Column(length = 2000)
     private String contenuTexte;
 
-    @NotEmpty
-    @Positive
-    private int numeroOrdre;
 
-    @OneToMany
-    private List<Media> medias;
+    @NotEmpty
+    private String type;
 }

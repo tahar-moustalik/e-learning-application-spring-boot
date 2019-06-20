@@ -21,26 +21,28 @@ public class Cours {
     @NotEmpty
     private String titre;
 
-    @NotEmpty
     @Positive
     private double prix;
 
-    @Size(min = 150)
+    //@Size(min = 150)
     @NotEmpty
+    @Column(length = 1000)
     private String description;
 
-    @NotEmpty
+    //@NotEmpty
     private String imageCover;
 
     private String videoPromo;
 
     @NotEmpty
+    @Column(length = 1000)
     private String messageBienvenue;
 
     @NotEmpty
+    @Column(length = 1000)
     private String messageFelicitation;
 
-    @NotEmpty
+    //@NotEmpty
     private String libelleDevise;
 
     @ElementCollection
@@ -55,9 +57,16 @@ public class Cours {
     @CollectionTable(name = "buts_cours")
     private List<String> buts;
 
-    @OneToMany
-    private List<Categorie> categoriesChoisies;
+    @ManyToOne
+    @JoinColumn
+    private Categorie categorie;
 
     @OneToMany
     private List<Chapitre> chapitres;
+
+    @Column(nullable = true)
+    private int nbreStars = 0;
+
+    @Column(nullable = true)
+    private int nbreReviews = 0;
 }

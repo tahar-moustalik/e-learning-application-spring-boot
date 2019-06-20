@@ -62,6 +62,8 @@ public class Utilisateur {
         roles.add(role);
     }
 
+    public void addCoursCree(Cours cours){coursCrees.add(cours);}
+
 
 
 

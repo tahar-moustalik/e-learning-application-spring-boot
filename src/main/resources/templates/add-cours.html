@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"  lang="fr"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        layout:decorate="~{auth_layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content" >
+    <!-- ================ start banner Area ================= -->
+    <section class="banner-area">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-12 banner-right">
+                    <h1 class="text-white">
+                        MEP Ajouter Cours
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="row">
+
+        <form action="/save-cours" id="msform" method="post">
+
+            <ul id="progressbar">
+                <li class="active">Titre</li>
+                <li>Description</li>
+                <li>Message Bienvenue</li>
+                <li>Message Félicitation</li>
+                <li>Catégories</li>
+                <li>Requis</li>
+                <li>Cibles</li>
+                <li>Objectifs</li>
+                <li>Prix & Libelle Devise</li>
+                <li>Chapitres</li>
+            </ul>
+
+            <fieldset>
+                <h2 class="fs-titre">Titre</h2>
+                <h3 class="fs-soustitre">Veuillez saisir un titre clair et intéressant</h3>
+                <div class="form-input-container">
+                    <input type="text" name="titre" class="form-control" placeholder="Titre Cours" maxlength="60">
+                    <div class="form-input-counter" id="t-counter">
+                        60
+                    </div>
+
+                </div>
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Description</h2>
+                <h3 class="fs-soustitre">Veuillez saisir une description</h3>
+                <div class="form-input-container">
+                    <textarea name="description" class="form-control" placeholder="Description Cours" maxlength="60">
+                  </textarea>
+
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Message Bienvenue</h2>
+                <h3 class="fs-soustitre">Veuillez saisir un message bienvenue pour vous participants</h3>
+                <div class="form-input-container">
+                    <textarea name="messageBienvenue" class="form-control" placeholder="Message Bienvenue Cours">
+                  </textarea>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Message Félicitation</h2>
+                <h3 class="fs-soustitre">Veuillez saisir un message de félicitation pour vous participants</h3>
+                <div class="form-input-container">
+                    <textarea name="messageFelicitation" class="form-control" placeholder="Message Félicitation Cours"
+                              maxlength="120">
+                  </textarea>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+
+            <fieldset>
+                <h2 class="fs-titre">Catégories</h2>
+                <h3 class="fs-soustitre">Vous pouvez choisir plusieurs catégories </h3>
+                <div class="form-input-container">
+
+                    <select name="categorie"  class="form-control col-12"
+                            title="Choisissez les catégories">
+                    <option th:each="n : ${categories}" th:value="${n.id}" th:text="${n.libelleCategorie}"/>
+                    </select>
+                </div>
+
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Requis</h2>
+                <h3 class="fs-soustitre">Ajouter l'ensemble de requis demandé pour suivre votre cours</h3>
+                <div>
+                    <div class="form-group row">
+                        <div class="col-10" id="requis-div">
+                            <input type="text" id="requis-cours" class="form-control" placeholder="Requis Cours" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+
+                        <a href="#" class="btn btn-outline-info" id="ajouter-requis"><i class="material-icons">add</i>
+                            Ajouter un requis
+                        </a>
+
+                    </div>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+
+
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Cibles</h2>
+                <h3 class="fs-soustitre">Ajouter les types de personnes ciblé par votre cours</h3>
+                <div>
+                    <div class="form-group row">
+                        <div class="col-10" id="cibles-div">
+                            <input type="text" id="cibles-cours" class="form-control" placeholder="Cibles Cours" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+
+                        <a href="#" class="btn btn-outline-info" id="ajouter-cible"><i class="material-icons">add</i>
+                            Ajouter une cible
+                        </a>
+
+                    </div>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+
+
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Objectifs</h2>
+                <h3 class="fs-soustitre">Ajouter ou minimum un objectif ou but de votre cours</h3>
+                <div>
+                    <div class="form-group row">
+                        <div class="col-10" id="objectifs-div">
+                            <input type="text" id="objectifs-cours" name="objectifs-cours" class="form-control"
+                                   placeholder="Objectifs Cours" />
+                        </div>
+
+
+                    </div>
+                    <div class="form-group row">
+
+                        <a href="#" class="btn btn-outline-info" id="ajouter-objectif"><i class="material-icons">add</i>
+                            Ajouter un objectif
+                        </a>
+
+                    </div>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Prix & Libellé Devise</h2>
+                <div class="form-input-container row ">
+                    <input type="number" min="0" name="prix" class="form-control col-4" placeholder="Prix Cours">
+                    <select name="devise" class="form-control col-8" title="Choisissez le libelle de devise">
+                        <option value="USD">US Dollars</option>
+                        <option value="Euro">Euro</option>
+                        <option value="MAD">MAD</option>
+                    </select>
+
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="button" name="suivant" class="suivant action-button" value="Suivant">
+            </fieldset>
+            <fieldset>
+                <h2 class="fs-titre">Chapitres</h2>
+                <button type="button" id="add-chapter" class="btn btn-sm btn-outline-info ml-auto">+ Chapitre</button>
+                <br>
+                <br>
+                <div class="form-input-container" id="chapitres-div">
+                    <div class="card" id="card-chap-1">
+                        <div class="card-header">
+                            <ul class="nav nav-pills">
+                                <li class="nav-item"><a class="nav-link" id="cr-chap-1"><i class="fa fa-check-circle"
+                                                                                           aria-hidden="true"></i>
+                                    Chapitre 1</a></li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" id="cr-chap-1-delete">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </li>
+                                <li class="nav-item ml-auto">
+                                    <a class="nav-link btn btn-outline-info text-info cnt-chap" data-toggle="modal"
+                                       data-target="#modalContenu" id="btn-cnt-chap-1">
+                                        + Contenu
+                                    </a>
+
+                                </li>
+                            </ul>
+
+
+                        </div>
+                        <div class="card-body" id="body-chap-1">
+
+                        </div>
+                    </div>
+                </div>
+                <input type="button" name="precedent" class="precedent action-button-precedent" value="Précedent">
+                <input type="submit" name="submit" class="submit action-button" value="Soumettre">
+            </fieldset>
+
+        </form>
+
+
+    </div>
+</div>
+
+</body>
+</html>

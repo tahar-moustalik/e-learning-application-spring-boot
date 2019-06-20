@@ -31,7 +31,25 @@
     <link rel="stylesheet" th:href="@{/css/nice-select.css}">
     <link rel="stylesheet" th:href="@{/css/hexagons.min.css}" />
     <link rel="stylesheet"  href="https://cdn.jsdelivr.net/themify-icons/0.1.2/css/themify-icons.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.css" rel="stylesheet">
+
     <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" th:href="@{/css/cours_style.css}" />
+    <link href="https://unpkg.com/cloudinary-video-player/dist/cld-video-player.min.css" rel="stylesheet">
+
+    <script src="https://unpkg.com/cloudinary-core/cloudinary-core-shrinkwrap.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/cloudinary-video-player/dist/cld-video-player.min.js" type="text/javascript"></script>
+    <script>
+        var cld = cloudinary.Cloudinary.new({ cloud_name: "dubphxozk"});
+    </script>
+    <script>
+        var cpt_i_cibles = 0;
+        var cpt_i_objectifs = 0;
+        var cpt_chapitre = 1;
+        var cpt_i_requis = 0;
+        let current_chap;
+
+    </script>
 </head>
 <body>
 
@@ -50,6 +68,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4"
         crossorigin="anonymous"></script>
 <script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.11/summernote-bs4.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
 <script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
 <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
@@ -61,5 +80,416 @@
 <script th:src="@{/js/waypoints.min.js}"></script>
 <script th:src="@{/js/jquery.nice-select.min.js}"></script>
 <script th:src="@{/js/main.js}"></script>
+<script type="text/javascript" th:src="@{js/form2js.js}"></script>
+<script type="text/javascript" th:src="@{js/jquery.toObject.js}"></script>
+<script type="text/javascript" th:src="@{js/json2.js}"></script>
+
+<script th:src="@{js/bootstrap-selectpicker.js}"></script>
+<script th:src="@{js/easing.js}"></script>
+<script type="text/javascript">
+    (function ($) {
+
+        function test(evt) {
+            evt.preventDefault();
+
+
+            formDataFirst = $('#msform').toObject({ mode: 'first' });
+
+            $('#testAreaFirst').html(JSON.stringify(formDataFirst, null, '\t'));
+
+            $.ajax({
+                url: '/save-cours',
+                type: 'post',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify(formDataFirst),
+                success: function (response) {
+                    console.log("res saving =" + response);
+                    window.location = '/cours-ajoute';
+                }
+            });
+        }
+
+        $(function () {
+            $('input[type=submit]').click(test);
+        });
+
+    })(jQuery);
+</script>
+<script>
+    // les variables des fieldsets
+
+    $(document).ready(function () {
+
+
+        $('#chaps').click(function () {
+            console.log($("#summernote").val());
+        });
+    });
+
+    let fs_courant, fs_suivant, fs_precedent;
+    let left, opacity, scale;  // proprietes des fieldsets a animer
+    let animating;
+
+    $(".suivant").click(function () {
+
+        if (animating) return false;
+        animating = true;
+
+        fs_courant = $(this).parent();
+        fs_suivant = $(this).parent().next();
+        $("#progressbar li").eq($("fieldset").index(fs_suivant)).addClass("active");
+
+        fs_suivant.show();
+
+        fs_courant.animate({ opacity: 0 }, {
+            step: function (now, mx) {
+                scale = 1 - (1 - now) * 0.2;
+                left = (now * 50) + "%";
+                opacity = 1 - now;
+                fs_courant.css({
+                    'transform': 'scale(' + scale + ')',
+                    'position': 'absolute'
+                });
+                fs_suivant.css({ 'left': left, 'opacity': opacity });
+            },
+            duration: 800,
+            complete: function () {
+                fs_courant.hide();
+                animating = false;
+            },
+            easing: 'easeInOutBack'
+        });
+
+    });
+
+
+    $(".precedent").click(function () {
+        if (animating) return false;
+        animating = true;
+
+        fs_courant = $(this).parent();
+        fs_precedent = $(this).parent().prev();
+
+        $("#progressbar li").eq($("fieldset").index(fs_courant)).removeClass("active");
+        fs_precedent.show();
+        fs_courant.animate({ opacity: 0 }, {
+            step: function (now, mx) {
+                scale = 0.8 + (1 - now) * 0.2;
+                left = ((1 - now) * 50) + "%";
+
+                opacity = 1 - now;
+                fs_courant.css({ 'left': left });
+                fs_precedent.css({ 'transform': 'scale(' + scale + ')', 'opacity': opacity });
+            },
+            duration: 800,
+            complete: function () {
+                fs_courant.hide();
+                animating = false;
+            },
+            easing: 'easeInOutBack'
+        });
+    });
+
+    $(".submit").click(function () {
+        return false;
+    })
+
+    let tmax = $("#t-input").attr('maxLength');
+    $("#t-input").keyup(function () {
+
+        $("#t-counter").empty();
+
+        let taille_texte = $(this).val().length;
+
+        let taille_texte_reste = tmax - taille_texte;
+        $("#t-counter").text(taille_texte_reste);
+
+
+
+
+    });
+
+
+
+    $("#ajouter-cible").click(() => {
+        var cible = $("#cibles-cours").val();
+        var dgrp = $("<div></div>").addClass("input-group").attr('id', "igrp-" + cpt_i_cibles);
+        var dgrpappend = $("<div></div>").addClass("input-group-prepend");
+        var sdelete = $("<span></span>").addClass("btn btn-outline form-control del-cible").attr('id', 'csd-' + cpt_i_cibles);
+        var idel = $("<i></i>").addClass("material-icons").text("delete");
+        sdelete.append(idel);
+        dgrpappend.append(sdelete);
+        var sp = $("<input type='text' />").addClass("form-control btn btn-outline").val(cible).attr('id', 'ci-' + cpt_i_cibles)
+            .attr('name', 'cibles[]');
+
+        cpt_i_cibles++;
+        dgrp.append(sp);
+        dgrp.append(dgrpappend);
+        $("#cibles-div").prepend(dgrp);
+        $("#cibles-cours").val("");
+
+    });
+
+    $(document).on("click", ".del-cible", function (ev) {
+        let val_del = $(this).attr('id');
+        let arr_cpt = val_del.split("-");
+        let cpt = arr_cpt[1];
+
+        $("#igrp-" + cpt).remove();
+
+
+    });
+
+    $("#ajouter-objectif").click(() => {
+        var cible = $("#objectifs-cours").val();
+        var dgrp = $("<div></div>").addClass("input-group").attr('id', "oigrp-" + cpt_i_objectifs);
+        var dgrpappend = $("<div></div>").addClass("input-group-prepend");
+        var sdelete = $("<span></span>").addClass("btn btn-outline form-control del-objectif").attr('id', 'osd-' + cpt_i_objectifs);
+        var idel = $("<i></i>").addClass("material-icons").text("delete");
+        sdelete.append(idel);
+        dgrpappend.append(sdelete);
+        var sp = $("<input type='text' />").addClass("form-control btn btn-outline").val(cible).attr('id', 'ci-' + cpt_i_objectifs)
+            .attr('name', 'objectifs[]');
+
+        cpt_i_objectifs++;
+        dgrp.append(sp);
+        dgrp.append(dgrpappend);
+        $("#objectifs-div").prepend(dgrp);
+        $("#objectifs-cours").val("");
+
+
+
+    });
+    7
+
+    $("#ajouter-requis").click(() => {
+        var cible = $("#requis-cours").val();
+        var dgrp = $("<div></div>").addClass("input-group").attr('id', "oigrp-" + cpt_i_requis);
+        var dgrpappend = $("<div></div>").addClass("input-group-prepend");
+        var sdelete = $("<span></span>").addClass("btn btn-outline form-control del-requis").attr('id', 'rsd-' + cpt_i_requis);
+        var idel = $("<i></i>").addClass("material-icons").text("delete");
+        sdelete.append(idel);
+        dgrpappend.append(sdelete);
+        var sp = $("<input type='text' />").addClass("form-control btn btn-outline").val(cible).attr('id', 'ci-' + cpt_i_requis)
+            .attr('name', 'requis[]');
+
+        cpt_i_requis++;
+        dgrp.append(sp);
+        dgrp.append(dgrpappend);
+        $("#requis-div").prepend(dgrp);
+        $("#requis-cours").val("");
+
+
+
+    });
+    $(document).on("click", ".del-objectif", function (ev) {
+        let val_del = $(this).attr('id');
+        let arr_cpt = val_del.split("-");
+        let cpt = arr_cpt[1];
+        $("#oigrp-" + cpt).remove();
+
+    });
+</script>
+<div class="modal fade" id="modalContenu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <a id="cnt-video" href="#">Video</a>
+
+                    </div>
+                    <div class="col-4">
+                        <a id="cnt-image" href="#">Image</a>
+                    </div>
+                    <div class="col-4">
+                        <a id="cnt-article" href="#">Article</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-4">
+                        <a id="cnt-video" href="#">Video</a>
+
+                    </div>
+                    <div class="col-4">
+                        <a id="cnt-image" href="#">Image</a>
+                    </div>
+                    <div class="col-4">
+                        <a id="cnt-article" href="#">Article</a>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    $("#cnt-video").click(function (e) {
+        let oform = $("<form></form>")
+            .attr('action', '/sendv').addClass('uSubmit row').attr('method', 'post')
+            .attr('id', 'form-chap-' + current_chap);
+        let ofile = $("<input class='upload_field form-control col-8'>").attr('name', 'video')
+            .attr('type', 'file');
+
+        let osubmit = $("<button type='button' class='btn btn-sm btn-outline-success col-2' onclick='send(this);'></button>")
+            .attr('id', 'submit-vchap-' + current_chap)
+            .text('Envoyer');
+        oform.append(ofile);
+        oform.append(osubmit);
+        let type_media = $('<input type="text">').
+        attr('name', 'chapitres[' + current_chap + '].paragraphe.type').val('video')
+            .attr('type', 'hidden');
+        $("#body-chap-" + current_chap).append(oform);
+        $("#body-chap-" + current_chap).append(type_media);
+
+        $("#btn-cnt-chap-" + current_chap).attr('disabled', 'true').hide();
+
+    });
+
+    $("#cnt-image").click(function (e) {
+
+    });
+
+    $("#cnt-article").click(function (e) {
+        let txt_area = $("<textarea ></textarea>")
+            .attr('id', 'txt-chap-' + current_chap).
+            attr('name', 'chapitres[' + current_chap + '].paragraphe.contenu');
+        let type_media = $('<input >').
+        attr('name', 'chapitres[' + current_chap + '].paragraphe.type').val('article')
+            .attr('type', 'hidden');
+
+        $("#body-chap-" + current_chap).append(txt_area);
+        $('#txt-chap-' + current_chap).summernote({
+            placeholder: '',
+            tabsize: 2,
+            height: 100
+        });
+        $("#body-chap-" + current_chap).append(type_media);
+        $("#btn-cnt-chap-" + current_chap).attr('disabled', 'true').hide();
+    });
+
+    $(document).on("click", ".cnt-chap", function (ev) {
+
+        let val_id = $(this).attr('id');
+        let arr_cpt = val_id.split("-");
+
+        let chap_cpt = arr_cpt[arr_cpt.length - 1];
+        console.log("cpt = " + chap_cpt);
+        current_chap = chap_cpt;
+
+        console.log(current_chap);
+    });
+
+
+
+
+
+
+    function send(elt) {
+        console.log("Eter");
+        let btn = elt;
+        console.log(btn);
+        let prt = btn.parentNode;
+        var post_url = $(prt).attr('action');
+        console.log(post_url);
+        var request_method = $(prt).attr("method"); //get form GET/POST method
+        var form_data = new FormData(prt); //Creates new FormData object
+        let val_id = $(prt).attr('id');
+        let arr_cpt = val_id.split("-");
+        let chap_cpt = arr_cpt[arr_cpt.length - 1];
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            xhr: function () {
+                //upload Progress
+                var xhr = $.ajaxSettings.xhr();
+                if (xhr.upload) {
+                    xhr.upload.addEventListener('progress', function (event) {
+                        let img_loading = $("<img  src='img/loading.gif' class='col-2'>").attr('id', 'chap-img-loading-' + chap_cpt);
+                        $("#form-chap-" + chap_cpt).append(img_loading);
+                    }, true);
+                }
+                return xhr;
+            }
+        }).done(function (response) { //
+            let ovideoid = $("<input class='form-control'>").
+            attr('name', 'chapitres[' + current_chap + '].paragraphe.contenu')
+                .attr('type', 'hidden')
+                .val(response.public_id);
+            $("#body-chap-" + current_chap).append(ovideoid);
+            $("#chap-img-loading-" + chap_cpt).remove();
+
+            let tdone = $("<i class='fa fa-check-circle col-2' aria-hidden='true'></i>");
+            $("#form-chap-" + chap_cpt).append(tdone);
+            console.log(response.public_id);
+        });
+
+
+
+    }
+
+
+    $("#add-chapter").click(() => {
+        ++cpt_chapitre;
+        let chap_card = $("<div class='card'></div>").attr('id', cpt_chapitre);
+        let chap_card_header = $("<div class='card-header'></div>");
+        let chap_card_body = $("<div class='card-body'></div>")
+            .attr('id', 'body-chap-' + cpt_chapitre);
+        let chap_card_ul = $("<ul class='nav nav-pills'></ul>");
+        let chap_card_li_1 = $("<li class='nav-item'><i class='fa fa-check-circle' aria-hidden='true'></i></li>")
+            .text('Chapitre ' + cpt_chapitre);
+        let chap_card_li_2 = $("<li class='nav-item'></li>");
+        let chap_card_li_3 = $("<li class='nav-item ml-auto'></li>");
+        let li_3_a = $("<a class='nav-link btn btn-outline-info text-info cnt-chap'></a>")
+            .attr('data-toggle', "modal")
+            .attr('data-target', "#modalContenu")
+            .attr('id', 'btn-cnt-chap-' + cpt_chapitre)
+            .text('+ Contenu');
+        chap_card_li_3.append(li_3_a);
+        let li_2_a = $("<a class='nav-link'></a>").attr('id', 'cr-chap-' + cpt_chapitre + '-delete');
+        let li_2_a_i = $("<i class='fa fa-trash'></i>");
+        li_2_a.append(li_2_a_i);
+        chap_card_li_2.append(li_2_a);
+        chap_card_ul.append(chap_card_li_1);
+        chap_card_ul.append(chap_card_li_2);
+        chap_card_ul.append(chap_card_li_3);
+        chap_card_header.append(chap_card_ul);
+        chap_card.append(chap_card_header);
+        chap_card.append(chap_card_body);
+        $("#chapitres-div").append(chap_card);
+
+    });
+
+
+</script>
 </body>
 </html>

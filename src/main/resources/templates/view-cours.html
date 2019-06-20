@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"  lang="en"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        layout:decorate="~{visitor_layout}">
+<head>
+</head>
+
+<body>
+
+
+<div layout:fragment="content" >
+    <!DOCTYPE html>
+    <html lang="zxx" class="no-js">
+
+    <head>
+    </head>
+
+    <body>
+
+
+    <!-- ================ start banner Area ================= -->
+    <section class="banner-area">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-12 banner-right">
+                    <h1 class="text-white">
+                        Details Cours
+                    </h1>
+                    <p class="mx-auto text-white  mt-20 mb-40"
+                      th:if="${cours.titre}" th:text="${cours.titre}">
+
+                    </p>
+                    <div class="link-nav">
+                        <span class="box">
+                            <a href="index.html">Accueil </a>
+                            <i class="lnr lnr-arrow-right"></i>
+                            <a href="courses.html">Cours </a>
+                            <i class="lnr lnr-arrow-right"></i>
+                            <a href="course-details.html">Details Cours</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ================ End banner Area ================= -->
+
+    <!--================ Start Course Details Area =================-->
+    <section class="course-details-area section-gap">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 course-details-left">
+                    <div class="main-image">
+                        <img class="img-fluid" src="img/courses/course-details.jpg" alt="">
+                    </div>
+                    <div class="content-wrapper">
+                        <h4 class="title">Description</h4>
+                        <div class="content">
+                            <p th:if="${cours.description}" th:text="${cours.description}">
+
+                            </p>
+                        </div>
+
+                        <h4 class="title">Cibles</h4>
+                        <div class="content">
+                            <div class="row col-10" th:each="cible: ${cours.utilisateursCibles}">
+                                <p class="col-6" ><i class="fa fa-check-circle"></i>
+                                    <span th:text="${cible}"></span>
+                                </p>
+
+                            </div>
+
+
+                        </div>
+
+                        <h4 class="title">Requis</h4>
+                        <div class="content">
+                            <div class="row" th:each="req: ${cours.requis}">
+                                <p class="col-6" ><i class="fa fa-check-circle"></i>
+                                    <span th:text="${req}"></span>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <h4 class="title">Objectifs</h4>
+                        <div class="content">
+                            <div class="row" th:each="objetif: ${cours.buts}">
+                                <p class="col-6" ><i class="fa fa-check-circle"></i>
+                                    <span th:text="${objetif}"></span>
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <h4 class="title">Plan de Cours
+                        </h4>
+                        <div class="content" id="accordion">
+                            <div class="card" th:each="chapitre: ${cours.chapitres}">
+                                <div class="card-header" th:id="|heading-chap-${chapitre.numeroOrdre}|">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse"
+                                                th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
+                                                aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|">
+                                            Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="|collapse-chap-${chapitre.numeroOrdre}|" class="collapse show"
+                                     aria-labelledby="|heading-chap-${chapitre.numeroOrdre}|" data-parent="#accordion">
+                                    <div class="card-body">
+                                            <div th:if="${chapitre.paragraphe.type == 'video'}">
+                                        <video
+                                                id="example-player"
+                                                controls
+                                                autoplay
+                                                th:data-cld-public-id="${chapitre.paragraphe.contenuTexte}"
+                                                class="cld-video-player cld-video-player-skin-dark">
+                                        </video>
+                                        </div>
+                                        <script>
+                                            cld.videoPlayer('example-player');
+
+                                        </script>
+                                         <div th:if="${chapitre.paragraphe.type == 'article'}">
+                                        <div th:utext="${chapitre.paragraphe.contenuTexte}">
+
+                                      </div>
+                                    </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4 right-contents">
+                    <ul>
+                        <li>
+                            <a class="justify-content-between d-flex" href="#">
+                                <p>Nom & Prénom du Formateur</p>
+                                <span class="or" th:text="${nom}"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="justify-content-between d-flex" href="#">
+                                <p>Prix du Cours</p>
+                                <span th:text="|${cours.prix} $|"></span>
+                            </a>
+                        </li>
+
+                    </ul>
+                    <a href="#" class="btn text-uppercase enroll">Acheter</a>
+
+                    <h4 class="title">Evaluation</h4>
+                    <div class="content">
+                        <div class="review-top row pt-40">
+                            <div class="col-lg-12">
+                                <div class="d-flex flex-row reviews justify-content-between">
+                                    <div class="star flex-column">
+                                        <i class="fa fa-star checked"></i>
+                                        <i class="fa fa-star checked"></i>
+                                        <i class="fa fa-star checked"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                    <div class="flex-column">
+                                        <span th:text="|${cours.nbreReviews}  Avis|"></span>
+
+
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </body>
+
+    </html>
+</div>
+
+</body>
+</html>

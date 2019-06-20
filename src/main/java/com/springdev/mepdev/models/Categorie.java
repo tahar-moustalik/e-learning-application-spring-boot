@@ -4,11 +4,10 @@ package com.springdev.mepdev.models;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -23,4 +22,7 @@ public class Categorie {
     @NotEmpty
     @NotEmpty(message = "*Veuillez saisir un libelle pour la catégorie")
     private String libelleCategorie;
+
+    @OneToMany(mappedBy = "categorie", cascade = CascadeType.ALL)
+    private List<Cours> cours;
 }
