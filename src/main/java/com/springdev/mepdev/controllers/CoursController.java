@@ -4,7 +4,9 @@ package com.springdev.mepdev.controllers;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.Util;
 import com.cloudinary.utils.ObjectUtils;
+import com.springdev.mepdev.JModels.CoursSpecification;
 import com.springdev.mepdev.JModels.FVideo;
+import com.springdev.mepdev.JModels.SearchCriteria;
 import com.springdev.mepdev.models.Categorie;
 import com.springdev.mepdev.models.Cours;
 import com.springdev.mepdev.models.Utilisateur;
@@ -15,6 +17,7 @@ import com.springdev.mepdev.services.CoursService;
 import com.springdev.mepdev.services.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -22,11 +25,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.jws.WebParam;
 import javax.websocket.server.PathParam;
@@ -65,7 +66,7 @@ public class CoursController {
     public ModelAndView showCours(){
         Utilisateur utilisateur = utilisateurService.getCurrentUser();
         List<Cours> coursList = utilisateur.getCoursCrees();
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         modelAndView.addObject("coursList",coursList);
         modelAndView.setViewName("cours-ajoute");
         return modelAndView;
@@ -76,11 +77,51 @@ public class CoursController {
     public ModelAndView addCours(){
         List<Categorie> categories = categorieRepository.findAll();
 
-        ModelAndView modelAndView = new ModelAndView();
+        ModelAndView modelAndView = utilisateurService.infoUser();
         modelAndView.addObject("categories",categories);
         modelAndView.setViewName("add-cours");
 
         return modelAndView;
+
+    }
+
+
+    @GetMapping("/search-cours")
+    public ModelAndView searchCours(@RequestParam("motCle") String motCle, @RequestParam("categorieId") Long categorieId){
+        CoursSpecification motCleSpec = new CoursSpecification(
+                new SearchCriteria("titre",":",motCle)
+        );
+        List<Cours> searchedCours;
+        if(categorieId != -1) {
+            CoursSpecification categSpec = new CoursSpecification(
+                    new SearchCriteria("categorie", "=", categorieId)
+            );
+
+           searchedCours = coursRepository.findAll(
+                    Specification.where(motCleSpec).and(categSpec)
+            );
+        }
+        else {
+            searchedCours = coursRepository.findAll(
+                    Specification.where(motCleSpec)
+            );
+        }
+        ModelAndView modelAndView;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if ((auth instanceof AnonymousAuthenticationToken)) {
+            modelAndView = new ModelAndView();
+            modelAndView.setViewName("search-cours");
+        }
+        else{
+             modelAndView = utilisateurService.infoUser();
+            modelAndView.setViewName("search-cours-auth");
+        }
+
+        modelAndView.addObject("searchedCpurs",searchedCours);
+
+        return modelAndView;
+
+
 
     }
 
@@ -104,23 +145,36 @@ public class CoursController {
         Cours cours = coursRepository.getOne(id);
         Boolean isPayed = false;
         String nomFormateur = "";
+        String payeeEmail = "";
        List<Utilisateur> utilisateurList = utilisateurRepository.findAll();
        for(Utilisateur user : utilisateurList){
            for(Cours cr : user.getCoursCrees()){
                if(cr.getId().equals(id)){
                    nomFormateur = user.getPrenom() + " " + user.getNom();
+                   payeeEmail = user.getProfil().getEmailPaypal();
                }
            }
        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+       ModelAndView modelAndView;
         if ((auth instanceof AnonymousAuthenticationToken)) {
+            modelAndView =new ModelAndView();
+            modelAndView.setViewName("view-cours");
            isPayed = false;
         }
         else {
+            modelAndView = utilisateurService.infoUser();
+            modelAndView.setViewName("view-cours-auth");
             Utilisateur utilisateur = utilisateurService.getCurrentUser();
-            Boolean exists = true;
-                    //utilisateurRepository.findByCoursAchetesContains(id);
+            Boolean exists = false;
+
+            for(Cours cr : utilisateur.getCoursAchetes()){
+                if(cr.getId().equals(id)){
+                    exists = true;
+                    break;
+                }
+            }
             if(exists){
                isPayed = true;
             }
@@ -132,18 +186,37 @@ public class CoursController {
 
         }
 
-        ModelAndView modelAndView = new ModelAndView();
+
         modelAndView.addObject("nom",nomFormateur);
+        modelAndView.addObject("payeeEmail",payeeEmail);
         modelAndView.addObject("test","Test Data");
         modelAndView.addObject("cours",cours);
         if(isPayed){
             modelAndView.addObject("isPayed",true);
         }
         else{
-            modelAndView.addObject("isNotBought","Non Paye");
+            modelAndView.addObject("isPayed",false);
         }
-        modelAndView.setViewName("view-cours");
+
         return modelAndView;
+
+    }
+
+    @PostMapping("/rate-cours/{id}")
+    public String rateCours(@RequestParam("id") Long id,@RequestParam("nbreStars") int nbreStars){
+       try {
+           Cours cours = coursRepository.getOne(id);
+           int newStarsNumber = (cours.getNbreStars() + nbreStars) / 2;
+           cours.setNbreStars(newStarsNumber);
+           cours.setNbreReviews(cours.getNbreReviews() + 1);
+           coursRepository.save(cours);
+           return "success";
+       }
+       catch(Exception e){
+           return "error";
+       }
+
+
 
     }
 

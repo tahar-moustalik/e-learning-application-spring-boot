@@ -1,8 +1,11 @@
 package com.springdev.mepdev.controllers;
 
 
+import com.springdev.mepdev.JModels.SearchObj;
+import com.springdev.mepdev.models.Categorie;
 import com.springdev.mepdev.models.Cours;
 import com.springdev.mepdev.models.Utilisateur;
+import com.springdev.mepdev.persistance.CategorieRepository;
 import com.springdev.mepdev.persistance.CoursRepository;
 import com.springdev.mepdev.services.UtilisateurService;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -31,6 +34,10 @@ public class LoginController {
     @Qualifier("coursRepository")
     private CoursRepository coursRepository;
 
+    @Autowired
+    @Qualifier("categorieRepository")
+    private CategorieRepository categorieRepository;
+
 
 
     @RequestMapping(value = "/",method = RequestMethod.GET)
@@ -38,6 +45,16 @@ public class LoginController {
 
         List<Cours> coursPopulaires = coursRepository.findTop5ByOrderByNbreReviewsDesc();
         ModelAndView modelAndView = new ModelAndView();
+        try{
+            SearchObj searchObj = new SearchObj();
+            modelAndView.addObject("searchObj",searchObj);
+        }
+        catch (Exception e){
+            e.getStackTrace();
+        }
+
+        List<Categorie> categories = categorieRepository.findAll();
+        modelAndView.addObject("categories",categories);
         modelAndView.addObject("coursPopulaires",coursPopulaires);
         modelAndView.setViewName("index");
         return modelAndView;
@@ -46,7 +63,7 @@ public class LoginController {
     @RequestMapping(value="/login", method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
+        modelAndView.setViewName("v2_login");
         return modelAndView;
     }
 
@@ -55,7 +72,7 @@ public class LoginController {
     public ModelAndView registration(Model model){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user",new Utilisateur());
-        modelAndView.setViewName("registration");
+        modelAndView.setViewName("v2_registration");
        return modelAndView;
     }
 
@@ -70,12 +87,12 @@ public class LoginController {
                             "L'email saisis déja  existe ");
         }
         if (bindingResult.hasErrors()) {
-            modelAndView.setViewName("registration");
+            modelAndView.setViewName("v2_registration");
         } else {
             utilisateurService.saveUser(user);
             modelAndView.addObject("successMessage", "Inscription est effectué avec Success!.Connectez-Vous !");
             modelAndView.addObject("user", new Utilisateur());
-            modelAndView.setViewName("registration");
+            modelAndView.setViewName("v2_registration");
 
         }
         return modelAndView;

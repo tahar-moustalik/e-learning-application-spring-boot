@@ -2,7 +2,7 @@
 <html   xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.w3.org/1999/xhtml"  lang="en"
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        layout:decorate="~{visitor_layout}">
+        layout:decorate="~{cours_layout}">
 <head>
 </head>
 
@@ -28,7 +28,7 @@
                         Details Cours
                     </h1>
                     <p class="mx-auto text-white  mt-20 mb-40"
-                      th:if="${cours.titre}" th:text="${cours.titre}">
+                       th:if="${cours.titre}" th:text="${cours.titre}">
 
                     </p>
                     <div class="link-nav">
@@ -104,28 +104,28 @@
                                         <button class="btn btn-link" data-toggle="collapse"
                                                 th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
                                                 aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|"
-                                                >
+                                        >
                                             Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
                                         </button>
                                     </h5>
-                                        <h5 class="mb-0" th:if="${!isPayed and chapitre.numeroOrdre > 1}">
-                                            <button class="btn btn-link" data-toggle="collapse"
-                                                    th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
-                                                    aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|"
-                                                    disabled>
-                                                Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
-                                            </button>
-                                        </h5>
+                                    <h5 class="mb-0" th:if="${!isPayed and chapitre.numeroOrdre > 1}">
+                                        <button class="btn btn-link" data-toggle="collapse"
+                                                th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
+                                                aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|"
+                                                disabled>
+                                            Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
+                                        </button>
+                                    </h5>
 
 
-                                        <h5 class="mb-0"  th:if="${isPayed}">
-                                            <button class="btn btn-link" data-toggle="collapse"
-                                                    th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
-                                                    aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|"
-                                                    >
-                                                Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
-                                            </button>
-                                        </h5>
+                                    <h5 class="mb-0"  th:if="${isPayed}">
+                                        <button class="btn btn-link" data-toggle="collapse"
+                                                th:data-target="|#collapse-chap-${chapitre.numeroOrdre}|"
+                                                aria-expanded="true" th:aria-controls="|collapse-chap-${chapitre.numeroOrdre}|"
+                                        >
+                                            Chapitre  <span th:text="${chapitre.numeroOrdre}"></span>
+                                        </button>
+                                    </h5>
 
                                 </div>
 
@@ -141,11 +141,11 @@
                                                 th:data-cld-public-id="${chapitre.paragraphe.contenuTexte}"
                                                 class="cld-video-player cld-video-player-skin-dark">
                                         </video>
-                                        </div>
+                                    </div>
                                          <div th:if="${chapitre.paragraphe.type == 'article'}">
                                         <div th:utext="${chapitre.paragraphe.contenuTexte}">
 
-                                      </div>
+                                        </div>
                                     </div>
 
 

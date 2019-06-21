@@ -24,28 +24,19 @@
                         <h4 th:text="${cours.description}"></h4>
                     </a>
                     <div class="bottom d-flex mt-15">
-                        <ul class="list">
-                            <li>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-star"></i></a>
-                            </li>
-                            <li>
-                                <a href="#"><i class="fa fa-star"></i></a>
+                        <ul class="list" >
+
+                                <li th:each="i : ${#numbers.sequence(1,cours.nbreStars,1)}">
+                                    <a>  <i  class="fa fa-star check"></i></a>
+                                </li>
+                            <li   th:each="i : ${#numbers.sequence(1,5-cours.nbreStars,1)}">
+                                <a>   <i  class="fa fa-star-o"></i></a>
                             </li>
                         </ul>
                         <p class="ml-20" th:text="${cours.nbreReviews} + '  Evaluations'"></p>
 
                         <p class="ml-50">
                             <a th:href="@{'/view-cours/' + ${cours.id}}" ><i class="icon fa fa-eye"></i></a>
-                            <a href="#" class="btn btn-sm btn-success btn-rounded text-white">Evaluer</a>
                         </p>
 
                     </div>

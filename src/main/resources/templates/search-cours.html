@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.w3.org/1999/xhtml"  lang="fr"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        layout:decorate="~{visitor_layout}">
+<head>
+</head>
+
+<body>
+<div layout:fragment="content" >
+    <!-- ================ start banner Area ================= -->
+    <section class="banner-area">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-12 banner-right">
+                    <h1 class="text-white">
+                    Les Cours Correspondants à vos recherche
+                    </h1>
+                    <div class="link-nav">
+						<span class="box">
+							<a href="index.html">Accueil </a>
+							<i class="lnr lnr-arrow-right"></i>
+							<a href="contacts.html">Cours Recherché</a>
+
+						</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================ End contact-page Area ================= -->
+
+    <section class="popular-course-area section-gap">
+        <div class="container-fluid">
+            <div class="owl-carousel popuar-course-carusel">
+                <div class="single-popular-course" th:each="cours: ${searchedCpurs}">
+                    <div class="thumb">
+                        <img class="f-img img-fluid mx-auto" src="img/popular-course/p2.jpg" alt="" />
+                    </div>
+                    <div class="details">
+                        <div class="d-flex justify-content-between mb-20">
+                            <p class="name" th:text="${cours.titre}"></p>
+                            <p class="value" th:text="${cours.prix}"></p>
+                        </div>
+                        <a href="#">
+                            <h4 th:text="${cours.description}"></h4>
+                        </a>
+                        <div class="d-flex flex-row reviews justify-content-between">
+                            <div class="star flex-column">
+                                <i th:each="i : ${#numbers.sequence(1,cours.nbreStars,1)}" class="fa fa-star checked">
+
+                                </i>
+
+                                <i class="fa fa-star" th:each="i : ${#numbers.sequence(1,5-cours.nbreStars,1)}"></i>
+
+                            </div>
+                            <div class="flex-column">
+                                <span th:text="|${cours.nbreReviews}  Avis|"></span>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+</body>
+</html>

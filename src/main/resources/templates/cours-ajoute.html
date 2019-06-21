@@ -2,7 +2,7 @@
 <html   xmlns:th="http://www.thymeleaf.org"
         xmlns:layout="http://www.w3.org/1999/xhtml"  lang="fr"
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        layout:decorate="~{auth_layout}">
+        layout:decorate="~{cours_layout}">
 <head>
 </head>
 
@@ -52,25 +52,21 @@
             <a href="#">
                 <h4 th:text="${cours.description}"></h4>
             </a>
-            <div class="bottom d-flex mt-15">
-                <ul class="list">
-                    <li>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-star"></i></a>
-                    </li>
-                </ul>
-                <p class="ml-20">25 Reviews</p>
+            <div class="d-flex flex-row reviews justify-content-between">
+                <div class="star flex-column">
+                    <i th:each="i : ${#numbers.sequence(1,cours.nbreStars,1)}" class="fa fa-star checked">
+
+                    </i>
+
+                    <i class="fa fa-star" th:each="i : ${#numbers.sequence(1,5-cours.nbreStars,1)}"></i>
+
+                </div>
+                <div class="flex-column">
+                    <span th:text="|${cours.nbreReviews}  Avis|"></span>
+
+
+                </div>
+
             </div>
         </div>
     </div>
