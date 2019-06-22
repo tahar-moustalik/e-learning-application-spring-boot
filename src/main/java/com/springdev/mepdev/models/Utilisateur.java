@@ -64,6 +64,8 @@ public class Utilisateur {
 
     public void addCoursCree(Cours cours){coursCrees.add(cours);}
 
+    public void addCoursAchetes(Cours cours){coursAchetes.add(cours);}
+
 
 
 

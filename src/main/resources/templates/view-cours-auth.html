@@ -174,7 +174,7 @@
 
                     </ul>
                     <form  th:if="${!isPayed}"  th:action="@{/paypal/make/payment(sum=${cours.prix},payeeEmail=${payeeEmail},cUrl='cancel-payment',
-                    sUrl='payment-success',action='show_all')}" method="post">
+                    sUrl='payment-success',coursId=${cours.id},action='show_all')}" method="post">
                         <button class="btn text-uppercase enroll" type="submit" th:if="${!isPayed}" th:text="Acheter"></button>
 
                     </form>

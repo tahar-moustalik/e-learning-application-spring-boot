@@ -58,7 +58,9 @@
                             </div>
                             <div class="flex-column">
                                 <span th:text="|${cours.nbreReviews}  Avis|"></span>
-
+                                <p class="ml-50">
+                                    <a th:href="@{'/view-cours/' + ${cours.id}}" ><i class="icon fa fa-eye"></i></a>
+                                </p>
 
                             </div>
 

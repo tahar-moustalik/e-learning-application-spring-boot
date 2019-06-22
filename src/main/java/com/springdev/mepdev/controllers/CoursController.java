@@ -63,15 +63,26 @@ public class CoursController {
             "api_secret", "tcvNTwPsmPtXzUcYF_8Np1zk7sE"));
 
     @GetMapping("/cours-ajoute")
-    public ModelAndView showCours(){
+    public ModelAndView showCours() {
         Utilisateur utilisateur = utilisateurService.getCurrentUser();
         List<Cours> coursList = utilisateur.getCoursCrees();
         ModelAndView modelAndView = utilisateurService.infoUser();
-        modelAndView.addObject("coursList",coursList);
+        modelAndView.addObject("coursList", coursList);
         modelAndView.setViewName("cours-ajoute");
         return modelAndView;
 
     }
+        @GetMapping("/cours-achetes")
+        public ModelAndView showCoursAchetes(){
+            Utilisateur utilisateur = utilisateurService.getCurrentUser();
+            List<Cours> coursList = utilisateur.getCoursAchetes();
+            ModelAndView modelAndView = utilisateurService.infoUser();
+            modelAndView.addObject("coursList",coursList);
+            modelAndView.setViewName("cours-achete");
+            return modelAndView;
+
+        }
+
 
     @GetMapping("/add-cours")
     public ModelAndView addCours(){
